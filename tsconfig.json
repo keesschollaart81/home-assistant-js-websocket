@@ -8,7 +8,8 @@
     "noUnusedLocals": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["lib/*"]
 }

@@ -8,6 +8,7 @@ import {
 } from "./errors";
 import { ConnectionOptions, Error } from "./types";
 import * as messages from "./messages";
+import WebSocket from 'isomorphic-ws'
 
 const DEBUG = false;
 
@@ -71,7 +72,7 @@ export function createSocket(options: ConnectionOptions): Promise<WebSocket> {
     };
 
     // Auth is mandatory, so we can send the auth message right away.
-    const handleOpen = async (event: MessageEventInit) => {
+    const handleOpen = async (event: { target: WebSocket }) => {
       try {
         if (auth.expired) await auth.refreshAccessToken();
         socket.send(JSON.stringify(messages.auth(auth.accessToken)));
@@ -82,7 +83,7 @@ export function createSocket(options: ConnectionOptions): Promise<WebSocket> {
       }
     };
 
-    const handleMessage = async (event: MessageEvent) => {
+    const handleMessage = async (event: { data: any; type: string; target: WebSocket }) => {
       const message = JSON.parse(event.data);
 
       if (DEBUG) {

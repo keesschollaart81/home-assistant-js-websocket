@@ -5,6 +5,7 @@
 import * as messages from "./messages";
 import { ERR_INVALID_AUTH, ERR_CONNECTION_LOST } from "./errors";
 import { ConnectionOptions, HassEvent, MessageBase } from "./types";
+import WebSocket from 'isomorphic-ws'
 
 const DEBUG = false;
 
@@ -243,7 +244,7 @@ export class Connection {
     return () => info.unsubscribe();
   }
 
-  private _handleMessage(event: MessageEvent) {
+  private _handleMessage(event: { data: any; type: string; target: WebSocket }) {
     const message: WebSocketResponse = JSON.parse(event.data);
 
     if (DEBUG) {
@@ -290,7 +291,7 @@ export class Connection {
     }
   }
 
-  private _handleClose(ev: CloseEvent) {
+  private _handleClose(ev: { wasClean: boolean; code: number; reason: string; target: WebSocket }) {
     // Reject in-flight sendMessagePromise requests
     Object.keys(this.commands).forEach(id => {
       const info: CommandInFlight = this.commands[id];

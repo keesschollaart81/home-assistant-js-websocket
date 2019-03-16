@@ -1,4 +1,5 @@
 import { Auth } from "./auth";
+import WebSocket from 'isomorphic-ws'
 
 export type Error = 1 | 2 | 3 | 4;
 
